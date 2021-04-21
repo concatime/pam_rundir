@@ -368,7 +368,7 @@ pam_sm_open_session (pam_handle_t *pamh, int flags, int argc, const char **argv)
         print_filename (file, (int) pw->pw_uid, l);
         fd = open_and_lock (file);
         if (fd < 0) {
-			printf("fd < 0\n");
+			printf("fd < 0: %s\n", file);
             return PAM_SESSION_ERR;
 		}
 
