@@ -339,11 +339,15 @@ pam_sm_open_session (pam_handle_t *pamh, int flags, int argc, const char **argv)
     struct passwd *pw;
     int l;
 
-    if (geteuid() != 0)
+    if (geteuid() != 0) {
+		printf("geteuid() != 0\n");
         return PAM_SESSION_ERR;
+	}
 
-    if (!ensure_parent_dir ())
+    if (!ensure_parent_dir ()) {
+		printf("!ensure_parent_dir ()\n");
         return PAM_SESSION_ERR;
+	}
 
     r = pam_get_user (pamh, &user, NULL);
     if (r != PAM_SUCCESS)
@@ -363,8 +367,10 @@ pam_sm_open_session (pam_handle_t *pamh, int flags, int argc, const char **argv)
 
         print_filename (file, (int) pw->pw_uid, l);
         fd = open_and_lock (file);
-        if (fd < 0)
+        if (fd < 0) {
+			printf("fd < 0\n");
             return PAM_SESSION_ERR;
+		}
 
         count = read_counter (fd);
         if (count < 0)
@@ -424,6 +430,9 @@ done:
         close (fd); /* also unlocks */
     }
 
+	if (r != 0) {
+    printf("r != 0\n");
+	}
     return (r == 0) ? PAM_SUCCESS : PAM_SESSION_ERR;
 }
 
