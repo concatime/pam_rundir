@@ -86,12 +86,15 @@ open_and_lock (const char *file)
 
     do { fd = open (file, O_RDWR | O_CREAT, S_IRUSR | S_IWUSR); }
     while (fd < 0 && errno == EINTR);
-    if (fd < 0)
+    if (fd < 0) {
+		printf("open failed with %d\n", errno);
         return fd;
+	}
 
     if (flock (fd, LOCK_EX) < 0)
     {
         close (fd);
+		printf("flock failed with %d\n", errno);
         return -1;
     }
 
